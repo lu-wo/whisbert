@@ -1,10 +1,10 @@
 <div align="center">
 
-# Quantifying the redundancy between prosody and linguistic content
+# WhisBERT: Multimodal Text-Audio Language Modeling on 100M Words
 
-## Language model-based probing of text for extra-linguistic features
+## Pre-training a language model from audio and text
 
-### Prosody Experiments Super Quick Start:
+### Experiments Super Quick Start:
 
 </div>
 

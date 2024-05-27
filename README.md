@@ -16,15 +16,15 @@ conda create --name prosody python=3.10
 conda activate prosody
 conda install --file conda_requirements.txt
 ```
-2. Download the already prepared prominence dataset:
+2. Download data to the data directory:
 ```
 cd data
-git clone https://github.com/Helsinki-NLP/prosody.git
+# download some data here (has to fit the expected format)
 ```
 3. Run your first experiment 
 ```
-cd .. # go back to project root
-python src/train.py experiment=duration_regression_abs_gpt2
+cd .. # go back to project root. to run the full multimodal whisbert training: 
+python src/train.py experiment=babylm/whisbert_multi
 ```
 <!-- </div> -->
 

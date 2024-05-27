@@ -2,6 +2,9 @@
 
 # WhisBERT: Multimodal Text-Audio Language Modeling on 100M Words
 
+[![Paper whisbert 2023](http://img.shields.io/badge/paper-arxiv.2206.08672-B31B1B.svg)](https://arxiv.org/abs/2312.02931)
+
+
 ## Pre-training a language model from audio and text
 
 ### Experiments Super Quick Start:

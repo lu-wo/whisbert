@@ -1,0 +1,58 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: f0_encoding.yaml
+  - override /model_task: reconstruction_module.yaml
+  - override /callbacks: prominence_regression.yaml
+  - override /logger: many_loggers.yaml
+  - override /trainer: gpu.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["lstm", "f0", "reconstruction"]
+
+seed: 12345
+
+logger:
+  wandb:
+    project: libritts-f0-reconstruction
+    entity: prosody
+    tags: ["lstm", "f0", "reconstruction"]
+    name: "run-${now:%Y-%m-%d_%H-%M-%S}"
+    group: "lstm" # Add this line to override the 'group' parameter
+    log_model: False # Add this line to override the 'log_model' parameter
+
+trainer:
+  min_epochs: 1
+  max_epochs: 10
+  gradient_clip_val: 1
+
+model_task:
+  huggingface_model: lstm # TODO: HACK fix this in train.py to read it from data config direclty 
+  input_features: 1
+  hidden_size: 8
+  output_features: 1
+  num_layers: 2
+  bidirectional: True
+  p_dropout: 0.0
+  optimizer:
+    lr: 0.0005
+    weight_decay: 0.1
+
+callbacks:
+  early_stopping:
+    patience: 2
+
+data:
+  batch_size: 1024
+  dataset_name: libriTTS
+  lab_root: /nese/mit/group/evlab/u/luwo/projects/data/LibriTTS/LibriTTSCorpusLabel/lab/word
+  wav_root: /nese/mit/group/evlab/u/luwo/projects/data/LibriTTS/LibriTTS
+  train_file: train-clean-100
+  val_file: debug
+  test_file: dev-clean
+  file_storage: /nese/mit/group/evlab/u/luwo/projects/MIT_prosody/data/LibriTTS/precomputed

@@ -1,0 +1,15 @@
+# @package _global_
+
+# uses only 1% of the training data and 5% of validation/test data
+
+defaults:
+  - default.yaml
+
+trainer:
+  max_epochs: 2
+  limit_train_batches: 0.1
+  limit_val_batches: 0.25
+  limit_test_batches: 0.25
+
+# data:
+#   data_dir: /Users/lukas/Desktop/projects/MIT/prosody/prosody/repositories/helsinki-prosody/data

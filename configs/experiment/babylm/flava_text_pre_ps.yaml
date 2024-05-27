@@ -1,0 +1,68 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: flava_text.yaml
+  - override /model_task: flava_text.yaml
+  - override /callbacks: flava_text.yaml
+  - override /logger: many_loggers.yaml
+  - override /trainer: gpu.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["flava", "MLM-only"]
+
+seed: 12345
+
+logger:
+  wandb:
+    project: Flava-MLM
+    entity: prosody
+    tags: ["flava", "MLM-only"]
+    name: "run-${now:%Y-%m-%d_%H-%M-%S}"
+    group: "flava-text-pre" # Add this line to override the 'group' parameter
+    log_model: False # Add this line to override the 'log_model' parameter
+
+trainer:
+  min_epochs: 1
+  max_epochs: 50
+  gradient_clip_val: 1
+  accumulate_grad_batches: 16 # Flava uses 2048 batch size for MLM pre-training
+
+model_task:
+  optimizer:
+    lr: 0.0005
+    weight_decay: 0
+  scheduler:
+    patience: 2
+  huggingface_model: "facebook/flava-full"
+  use_pretrained: true 
+  tokenizer_path: null # /om/user/luwo/projects/MIT_prosody/src/tokenizer/tokenizer-trained_babyLM.json
+  mask_rate: 0.4
+  vocab_size: 30522
+  type_vocab_size: 2
+  max_position_embeddings: 512
+  position_embedding_type: "absolute"
+  hidden_size: 768
+  num_hidden_layers: 12
+  num_attention_heads: 12
+  intermediate_size: 3072
+  hidden_act: "gelu"
+  hidden_dropout_prob: 0.0
+  attention_probs_dropout_prob: 0.1
+
+callbacks:
+  early_stopping:
+    patience: 3
+
+data:
+  batch_size: 128
+  dataset_name: peoples_speech
+  data_cache: /om/user/luwo/projects/data/cache
+  data_root: /om/user/luwo/projects/data/peoples_speech/alignments/data/SPAS/peoples-speech-joint-filtered_88M
+  min_confidence: 0.0
+  max_words: 96
+  debug: false

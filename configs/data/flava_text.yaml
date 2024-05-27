@@ -1,0 +1,18 @@
+_target_: src.data.flava_text_datamodule.FlavaTextDataModule  
+lab_root: /nese/mit/group/evlab/u/luwo/projects/data/LibriTTS/LibriTTSCorpusLabel/lab/word
+phoneme_lab_root: /nese/mit/group/evlab/u/luwo/projects/data/LibriTTS/LibriTTSCorpusLabel/lab/phone
+wav_root: /nese/mit/group/evlab/u/luwo/projects/data/LibriTTS/LibriTTS
+train_file: test-clean
+val_file: test-clean
+test_file: test-clean
+dataset_name: LibriTTS
+
+batch_size: 32
+train_val_test_split: null
+
+model_name: facebook/flava-full
+use_fast_tokenizer: False 
+tokenizer_path: null 
+
+num_workers: 0
+pin_memory: False

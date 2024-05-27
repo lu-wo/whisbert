@@ -1,0 +1,5 @@
+# https://lightning.ai/docs/pytorch/latest/api/lightning.pytorch.callbacks.RichProgressBar.html
+
+store_test_data:
+  _target_: src.callbacks.test_callbacks.TestPredictionLogger
+  output_dir: ${paths.output_dir}/predictions

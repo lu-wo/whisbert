@@ -1,0 +1,53 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: f0_regression.yaml
+  - override /model_task: token_tagging_regressor.yaml
+  - override /callbacks: prominence_regression.yaml
+  - override /logger: many_loggers.yaml
+  - override /trainer: gpu.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["bert", "f0", "regression", "absolute"]
+
+seed: 12345
+
+logger:
+  wandb:
+    project: libritts-f0-reg-absolute
+    entity: prosody
+    tags: ["bert", "f0", "regression", "absolute"]
+    name: "run-${now:%Y-%m-%d_%H-%M-%S}"
+    group: "bert" # Add this line to override the 'group' parameter
+    log_model: False # Add this line to override the 'log_model' parameter
+
+trainer:
+  min_epochs: 1
+  max_epochs: 100
+  gradient_clip_val: 1
+
+model_task:
+  huggingface_model: bert-base-cased
+  num_labels: 1
+  optimizer:
+    lr: 0.00005
+    weight_decay: 0.1
+
+callbacks:
+  early_stopping:
+    patience: 10
+
+data:
+  model_name: bert-base-cased
+  batch_size: 32
+  dataset_name: helsinki_prominence
+  lab_root: /nese/mit/group/evlab/u/luwo/projects/data/LibriTTS/LibriTTSCorpusLabel/lab/word/train-clean-360
+  wav_root: /nese/mit/group/evlab/u/luwo/projects/data/LibriTTS/LibriTTS/train-clean-360
+  score_last_token: true # only score the first token of a word in loss
+  # relative_to_prev: False # labels are not absolute but relative to n previous words' avg
+  # n_prev: 3 # number of previous words to compute the avg 

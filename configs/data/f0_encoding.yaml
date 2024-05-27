@@ -1,0 +1,10 @@
+_target_: src.data.f0_encoding_datamodule.F0EncodingDataModule
+dataset_name: null
+lab_root: /nese/mit/group/evlab/u/luwo/projects/data/LibriTTS/LibriTTSCorpusLabel/lab/word/dev-clean
+wav_root: /nese/mit/group/evlab/u/luwo/projects/data/LibriTTS/LibriTTS/dev-clean
+
+batch_size: 32
+train_val_test_split: [0.8, 0.1, 0.1]
+
+num_workers: 0
+pin_memory: False

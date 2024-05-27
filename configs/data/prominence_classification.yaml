@@ -1,0 +1,20 @@
+_target_: src.data.prominence_classification_datamodule.ProminenceClassificationDataModule
+data_dir: /Users/lukas/Desktop/projects/MIT/prosody/prosody/repositories/helsinki-prosody/data
+train_file: train_360.txt
+val_file: dev.txt
+test_file: test.txt
+
+batch_size: 32
+train_val_test_split: null
+
+model_name: gpt2 # gpt2 or bert-base-{uncased, cased}
+use_fast_tokenizer: False 
+score_first_token: False # only score the first token of a word in loss
+score_last_token: False
+relative_to_prev: False # labels are not absolute but relative to n previous words' avg
+n_prev: 1 # number of previous words to compute the avg 
+relative_to_mean: False 
+word_stats_path: null
+
+num_workers: 0
+pin_memory: False

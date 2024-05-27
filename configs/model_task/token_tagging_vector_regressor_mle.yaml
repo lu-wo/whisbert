@@ -1,0 +1,28 @@
+_target_: src.models.token_tagging_vector_regressor_mle.TokenTaggingVectorRegressorMLE
+
+optimizer:
+  _target_: torch.optim.AdamW
+  _partial_: true
+  lr: 0.001
+  weight_decay: 0.0
+  
+scheduler:
+  _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+  _partial_: true
+  mode: min
+  factor: 0.1
+  patience: 2
+
+huggingface_model: gpt2
+freeze_lm: false # freeze the language model
+num_labels: 1
+
+use_mlp: false
+
+output_activation:
+  # _target_: src.utils.torch_utils.SELU_Range
+  # _target_: src.utils.torch_utils.SELU_Learnable
+  # _target_: src.utils.torch_utils.ScaledSigmoid
+  _target_: torch.nn.Identity
+  # _target_: torch.nn.ReLU
+  # _target_: torch.nn.LeakyReLU

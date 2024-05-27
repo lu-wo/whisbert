@@ -1,0 +1,90 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: whisbert.yaml
+  - override /model_task: whisbert.yaml
+  - override /callbacks: wav2vec2.yaml
+  - override /logger: many_loggers.yaml
+  - override /trainer: gpu.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["whisbert", "text"]
+
+seed: 12345
+
+logger:
+  wandb:
+    project: whisbert-ps
+    entity: prosody
+    tags: ["whisbert", "text"]
+    name: "run-${now:%Y-%m-%d_%H-%M-%S}"
+    group: "text" # Add this line to override the 'group' parameter
+    log_model: False # Add this line to override the 'log_model' parameter
+
+
+trainer:
+  min_epochs: 1
+  max_epochs: 10
+  log_every_n_steps: 5
+  gradient_clip_val: 1
+  accumulate_grad_batches: 32 # Flava uses 2048 batch size for MLM pre-training
+
+model_task:
+  optimizer:
+    lr: 0.00005
+    weight_decay: 0
+  scheduler:
+    patience: 2
+  huggingface_model: bert-base-cased
+  tokenizer_path: null #src/tokenizer/tokenizer-trained-babylm_100M
+  # text encoder 
+  vocab_size: 30522
+  type_vocab_size: 2
+  max_position_embeddings: 512
+  position_embedding_type: "absolute"
+  hidden_size: 768
+  num_hidden_layers: 12
+  num_attention_heads: 12
+  intermediate_size: 3072
+  hidden_act: "gelu"
+  hidden_dropout_prob: 0.0
+  attention_probs_dropout_prob: 0.1
+  use_pretrained: false
+  # audio encoder
+  audio_encoder_layers: 6
+  audio_encoder_heads: 6
+  audio_encoder_ff_dim: 1024
+  audio_encoder_max_source_positions: 4096
+  audio_encoder_num_mel_bins: 80
+  audio_encoder_kernel_size: 20
+  audio_encoder_stride: 16
+  # loss 
+  unimodal_prob: 1.0
+  mlm_weight: 1.0
+  mam_weight: 0.0
+  uni_text_mask_rate: 0.4
+
+callbacks:
+  early_stopping:
+    patience: 3
+  model_checkpoint:
+    every_n_train_steps: 200
+
+data:
+  batch_size: 8
+  dataset_name: peoples_speech
+  data_cache: /om/user/luwo/projects/data/cache
+  file_mapping_path: /om/user/luwo/projects/data/peoples_speech/mappings/mapping_100M.csv
+  tokenizer_path: null #src/tokenizer/tokenizer-trained-babylm_100M
+  dataset_total_words: 80e6
+  debug: false
+  mel_channels: 80
+  max_sentence_length: 25
+  padding_value: 0.0
+  train_val_test_split: [0.8, 0.1, 0.1]
+  num_workers: 0

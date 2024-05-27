@@ -1,0 +1,55 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: wav2vec2_ps.yaml
+  - override /model_task: wav2vec2.yaml
+  - override /callbacks: wav2vec2.yaml
+  - override /logger: many_loggers.yaml
+  - override /trainer: gpu.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["wav2vec2", "audio-only"]
+
+seed: 12345
+
+logger:
+  wandb:
+    project: wav2vec2-ps
+    entity: prosody
+    tags: ["wav2vec2", "audio-only"]
+    name: "run-${now:%Y-%m-%d_%H-%M-%S}"
+    group: "wav2vec2-fresh" # Add this line to override the 'group' parameter
+    log_model: False # Add this line to override the 'log_model' parameter
+
+trainer:
+  min_epochs: 1
+  max_epochs: 50
+  gradient_clip_val: 1
+  accumulate_grad_batches: 32 # Flava uses 2048 batch size for MLM pre-training
+
+model_task:
+  optimizer:
+    lr: 0.0005
+    weight_decay: 0
+  scheduler:
+    patience: 2
+  use_pretrained: false 
+
+callbacks:
+  early_stopping:
+    patience: 3
+
+data:
+  batch_size: 16
+  dataset_name: peoples_speech
+  data_cache: /Users/lukas/Desktop/Projects/MIT/data/cache
+  file_mapping_path: /om/user/luwo/projects/MIT_prosody/precomputed/ps_audio_transcript_mapping/file_mapping_dirty_88M.csv
+  # text_root: /om/user/luwo/projects/data/peoples_speech/alignments/data/SPAS/peoples-speech-joint-filtered
+  # audio_root: /om/user/luwo/projects/data/peoples_speech/
+  debug: false
+  num_workers: 0

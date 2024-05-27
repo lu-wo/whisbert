@@ -1,0 +1,18 @@
+_target_: src.data.whisbert_datamodule.WhisBertDataModule
+data_cache: null 
+dataset_name: peoples_speech
+text_root: /om/user/luwo/projects/data/peoples_speech/alignments/data/SPAS/peoples-speech-joint-filtered
+audio_root: /om/user/luwo/projects/data/peoples_speech/
+file_mapping_path: null
+
+mel_channels: 80
+sample_rate: 16000
+max_sentence_length: 90 
+padding_value: 0.0
+dataset_total_words: 100e6
+
+batch_size: 128
+train_val_test_split: [0.33, 0.33, 0.33]
+
+num_workers: 4
+pin_memory: False

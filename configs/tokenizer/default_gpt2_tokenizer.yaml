@@ -1,0 +1,3 @@
+target: transformers.GPT2Tokenizer
+
+add_prefix_space: true

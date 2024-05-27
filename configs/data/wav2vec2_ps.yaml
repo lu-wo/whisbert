@@ -1,0 +1,13 @@
+_target_: src.data.wav2vec2_datamodule.Wav2Vec2DataModule
+data_cache: null 
+dataset_name: peoples_speech
+text_root: /om/user/luwo/projects/data/peoples_speech/alignments/data/SPAS/peoples-speech-joint-filtered
+audio_root: /om/user/luwo/projects/data/peoples_speech/
+
+sample_rate: 16000
+
+batch_size: 128
+train_val_test_split: [0.33, 0.33, 0.33]
+
+num_workers: 8
+pin_memory: False

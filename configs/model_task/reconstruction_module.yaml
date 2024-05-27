@@ -1,0 +1,30 @@
+_target_: src.models.reconstruction_module.ReconstructionModule
+
+optimizer:
+  _target_: torch.optim.AdamW
+  _partial_: true
+  lr: 0.001
+  weight_decay: 0.0
+  
+scheduler:
+  _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+  _partial_: true
+  mode: min
+  factor: 0.1
+  patience: 2
+
+huggingface_model: lstm # TODO: HACK fix this in train.py to read it from data config direclty 
+input_features: 1
+hidden_size: 128
+output_features: 1
+num_layers: 1
+bidirectional: True
+p_dropout: 0.5
+
+output_activation:
+  # _target_: src.utils.torch_utils.SELU_Range
+  # _target_: src.utils.torch_utils.SELU_Learnable
+  # _target_: src.utils.torch_utils.ScaledSigmoid
+  _target_: torch.nn.Identity
+  # _target_: torch.nn.ReLU
+  # _target_: torch.nn.LeakyReLU

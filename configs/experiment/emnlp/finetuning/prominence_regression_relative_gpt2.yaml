@@ -1,0 +1,60 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: prominence_regression.yaml
+  - override /model_task: token_tagging_regressor_mle.yaml
+  - override /callbacks: prominence_regression.yaml
+  - override /logger: many_loggers.yaml
+  - override /trainer: gpu.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["gpt2", "prominence", "regression", "relative_prev"]
+
+seed: 12345
+
+logger:
+  wandb:
+    project: EMNLP-prominence-relative-prev
+    entity: prosody
+    tags: ["gpt2", "prominence", "regression", "relative_prev"]
+    name: "run-${now:%Y-%m-%d_%H-%M-%S}"
+    group: "gpt2" # Add this line to override the 'group' parameter
+    log_model: False # Add this line to override the 'log_model' parameter
+
+trainer:
+  min_epochs: 1
+  max_epochs: 50
+  gradient_clip_val: 1
+  accumulate_grad_batches: 4
+
+model_task:
+  huggingface_model: gpt2
+  num_labels: 1
+  optimizer:
+    lr: 0.00005
+    weight_decay: 0.1
+  scheduler:
+    patience: 2
+  # use_mlp: false 
+  # freeze_lm: false
+  # train_last_k_layers: 3
+
+callbacks:
+  early_stopping:
+    patience: 3
+
+data:
+  batch_size: 64
+  dataset_name: helsinki_prominence
+  data_dir: /nese/mit/group/evlab/u/luwo/projects/prosody/prosody/repositories/helsinki-prosody/data
+  train_file: train_360.txt
+  val_file: dev.txt
+  test_file: test.txt
+  score_last_token: True # only score the first token of a word in loss
+  relative_to_prev: True # labels are not absolute but relative to n previous words' avg
+  n_prev: 3 # number of previous words to compute the avg 

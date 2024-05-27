@@ -1,0 +1,16 @@
+_target_: src.models.flava_text_model.FlavaMLMTrainingModule
+
+huggingface_model: facebook/flava-full
+
+optimizer:
+  _target_: torch.optim.AdamW
+  _partial_: true
+  lr: 0.0005
+  weight_decay: 0.0
+  
+scheduler:
+  _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+  _partial_: true
+  mode: min
+  factor: 0.1
+  patience: 2

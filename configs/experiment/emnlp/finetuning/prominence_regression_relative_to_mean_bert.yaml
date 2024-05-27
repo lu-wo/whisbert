@@ -1,0 +1,61 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: prominence_regression.yaml
+  - override /model_task: token_tagging_regressor_mle.yaml
+  - override /callbacks: prominence_regression.yaml
+  - override /logger: many_loggers.yaml
+  - override /trainer: gpu.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["bert-cased", "prominence", "regression", "relative to mean"]
+
+seed: 42
+
+logger:
+  wandb:
+    project: EMNLP-prominence-relative-mean
+    entity: prosody
+    tags: ["bert-cased", "prominence", "regression", "relative to mean"]
+    name: "run-${now:%Y-%m-%d_%H-%M-%S}"
+    group: "bert-cased" # Add this line to override the 'group' parameter
+    log_model: False # Add this line to override the 'log_model' parameter
+
+trainer:
+  min_epochs: 1
+  max_epochs: 50
+  gradient_clip_val: 1
+  accumulate_grad_batches: 4
+
+model_task:
+  huggingface_model: bert-base-cased
+  num_labels: 1
+  optimizer:
+    lr: 0.00005
+    weight_decay: 0.1
+  scheduler:
+    patience: 2
+  # use_mlp: false 
+  # freeze_lm: false
+  # train_last_k_layers: 3
+
+callbacks:
+  early_stopping:
+    patience: 3
+
+data:
+  model_name: bert-base-cased
+  batch_size: 64
+  dataset_name: helsinki_prominence
+  data_dir: /nese/mit/group/evlab/u/luwo/projects/prosody/prosody/repositories/helsinki-prosody/data
+  train_file: train_360.txt
+  val_file: dev.txt
+  test_file: test.txt
+  score_last_token: True # only score the first token of a word in loss
+  relative_to_mean: True 
+  word_stats_path: /nese/mit/group/evlab/u/luwo/projects/MIT_prosody/data/Helsinki/word_to_stats_cased.json

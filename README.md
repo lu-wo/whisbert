@@ -15,9 +15,9 @@
 
 1. Create an environment, e.g with [anaconda](https://www.anaconda.com/products/individual).
 ```
-conda create --name prosody python=3.10
-conda activate prosody
-conda install --file conda_requirements.txt
+conda create --name whisbert python=3.10
+conda activate whisbert
+# go to step 3 and run an experiment and install all packages -- feel free to submit a valid requirements.txt file!
 ```
 2. Download data to the data directory:
 ```
